@@ -67,7 +67,7 @@ module "rds" {
   db_allocated_storage = 25
   db_name             = "test"
   db_username         = "admin"
-  db_password         = "password123"  # Consider using AWS Secrets Manager
+  db_password         = "password123"  # Consider using AWS Secrets Manager or Vault  
   db_security_group_id = module.security_group.security_group_id
   db_subnet_ids       = [module.network.private_subnet_ids[4], module.network.private_subnet_ids[5]]  # ✅ Fixed Reference
 }
@@ -102,9 +102,9 @@ module "launch_templates" {
   source              = "./modules/launch_templates"
   frontend_lt_name    = "frontend-lt"
   backend_lt_name     = "backend-lt"
-  key_name            = "ramanikey"
-  ami_id_frontend     = "ami-0c74c875f4df01539"
-  ami_id_backend      = "ami-028bea3d2aaaef497"
+  key_name            = "madhu"
+  ami_id_frontend     = "ami-026ff2aed0f235b98"
+  ami_id_backend      = "ami-0cf6e84dc7d56f9d1"
   instance_type       = "t3.micro"
   frontend_user_data  = "frontend.sh"
   backend_user_data   = "backend.sh"
@@ -118,7 +118,7 @@ module "autoscaling" {
   frontend_asg_name    = "frontend-asg"
   backend_asg_name     = "backend-asg"
   asg_min_size         = 1
-  asg_max_size         = 3
+  asg_max_size         = 1
   asg_desired_capacity = 1
   frontend_subnet_ids  = [module.network.private_subnet_ids[0], module.network.private_subnet_ids[1]]
   backend_subnet_ids   = [module.network.private_subnet_ids[2], module.network.private_subnet_ids[3]]
@@ -131,9 +131,9 @@ module "autoscaling" {
 
 module "bastion" {
   source            = "./modules/bastion"
-  ami_id            = "ami-04b4f1a9cf54c11d0"
+  ami_id            = "ami-0c3389a4fa5bddaad"
   instance_type     = "t3.micro"
-  key_name          = "ramanikey"
+  key_name          = "madhu"
   public_subnet_id  = module.network.public_subnet_ids[0]
   security_group_id = module.security_group.security_group_id
 }
@@ -153,6 +153,6 @@ module "route53" {
 
 module "acm" {
   source      = "./modules/acm"
-  domain_name = "b15facebook.xyz"
-  san_names   = ["*.b15facebook.xyz"]
+  domain_name = "b17facebook.xyz"
+  san_names   = ["*.b17facebook.xyz"]
 }
